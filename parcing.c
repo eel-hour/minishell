@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/03 00:37:44 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/03 00:44:19 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,8 @@ char **parcer(char *str)
 	size_t  sub_a;
 	size_t  sub_b;
 
-	if (error(str) != 1)
-		exit(0);
+	// if (error(str) != 0)
+	// 	exit(0);
 		//ana drt exit hna nta ghadir return chi 9lwa bach tl3 command prompt again
 	parced = malloc(sizeof(char**) * count(str));
 	i = 0;
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 	int i = 0;
 	
 	// printf("%s", argv[1]);
-	char p[30] = "\"pwd\"\">>\"\"ps\0";
+	char p[30] = "\"pwd\"\">>\"\"po\"\0";
 	// printf("%d\n\n", count(argv[1]));
 	char **parc = parcer(p);
 	while (parc[i] != 0)
