@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/02 02:56:57 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/03 00:37:44 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 
 	i = ft_strlen(s);
 	if (start > i)
-		return (ft_calloc(1, 1));
+		return ("\0");
 	if (len > i)
 		len = i - start;
 	if (!s)
@@ -66,27 +66,69 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	return (str);
 }
 
-// int error(char *str)
-// {
-// 	int i;
-// 	int error_found;
+int redirect_count(char *str)
+{
+	int i;
+	int count;
 
-// 	i = 0;
-// 	error_found = 0;
-// 	while (str[i] != '\0')
-// 	{
-// 		if (str[i] == '\'')
-// 		{
-// 			while (str[i] != '\0')
-// 			{
-// 				i++;
-// 				if (str[i] == '\'')
-// 					break;
-// 			}
-// 		}
-// 		i++;
-// 	}
-// }
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '>')
+		{
+			i++;
+			if (str[i] >= 21 && str[i] <= 126)
+				i++;
+			count++;
+		}
+		else
+			i++;
+	}
+	return (count);
+}
+
+int error(char *str)
+{
+	int i;
+	int error_found;
+
+	i = 0;
+	error_found = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'')
+		{
+			error_found = 1;
+			while (str[i] != '\0')
+			{
+				i++;
+				if (str[i] == '\'')
+				{
+					error_found = 0;
+					break;
+				}
+			}
+	
+		}
+		else if (str[i] == '\"')
+		{
+			error_found = 2;
+			while (str[i] != '\0')
+			{
+				i++;
+				if (str[i] == '\"')
+				{
+					error_found = 0;
+					break;
+				}
+			}
+		}
+		else
+			i++;
+	}
+	return (error_found);
+}
 
 int count(char *str)
 {
@@ -137,15 +179,18 @@ int count(char *str)
 	return (count);
 }
 
-char **parcer(int counted, char *str)
+char **parcer(char *str)
 {
 	char 	**parced;
 	size_t	i;
 	size_t	k;
 	size_t  sub_a;
 	size_t  sub_b;
-  
-	parced = malloc(sizeof(char**) * counted);
+
+	if (error(str) != 1)
+		exit(0);
+		//ana drt exit hna nta ghadir return chi 9lwa bach tl3 command prompt again
+	parced = malloc(sizeof(char**) * count(str));
 	i = 0;
 	k = 0;
 	while (str[i] != '\0')
@@ -192,7 +237,7 @@ char **parcer(int counted, char *str)
                 i++;
 			sub_b = i;
         }
-		if ((sub_b - sub_a) > 0 && k < counted)
+		if ((sub_b - sub_a) > 0 && k < count(str))
 		{
 			parced[k] = ft_substr(str, sub_a, sub_b - sub_a);
 			k++;
@@ -205,9 +250,11 @@ char **parcer(int counted, char *str)
 int main(int argc, char **argv)
 {
 	int i = 0;
+	
 	// printf("%s", argv[1]);
+	char p[30] = "\"pwd\"\">>\"\"ps\0";
 	// printf("%d\n\n", count(argv[1]));
-	char **parc = parcer(count(argv[1]), argv[1]);
+	char **parc = parcer(p);
 	while (parc[i] != 0)
 	{
 		printf("%s\n", parc[i]);
