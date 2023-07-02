@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/02 02:26:54 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/02 02:33:26 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,6 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 
 int error(char *str)
 {
-	int i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '\'')
-		{
-			while (str[i] != '\0')
-			{
-				i++;
-				if (str[i] == '\'')
-					break;
-			}
-		}
-		i++;
-	}
 }
 
 int count(char *str)
@@ -203,8 +187,6 @@ char **parcer(int counted, char *str)
 int main(int argc, char **argv)
 {
 	int i = 0;
-	// printf("%s", argv[1]);
-	// printf("%d", count(argv[1]));
 	char **parc = parcer(count(argv[1]), argv[1]);
 	while (parc[i] != 0)
 	{
