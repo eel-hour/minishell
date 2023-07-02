@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/02 02:33:26 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/02 02:56:57 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,27 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	return (str);
 }
 
-int error(char *str)
-{
-}
+// int error(char *str)
+// {
+// 	int i;
+// 	int error_found;
+
+// 	i = 0;
+// 	error_found = 0;
+// 	while (str[i] != '\0')
+// 	{
+// 		if (str[i] == '\'')
+// 		{
+// 			while (str[i] != '\0')
+// 			{
+// 				i++;
+// 				if (str[i] == '\'')
+// 					break;
+// 			}
+// 		}
+// 		i++;
+// 	}
+// }
 
 int count(char *str)
 {
@@ -170,7 +188,7 @@ char **parcer(int counted, char *str)
         else
         {
 			sub_a = i;
-            while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '|' && str[i] != '\"' && str[i] != '\'')
+            while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != '\"' && str[i] != '\'')
                 i++;
 			sub_b = i;
         }
@@ -187,6 +205,8 @@ char **parcer(int counted, char *str)
 int main(int argc, char **argv)
 {
 	int i = 0;
+	// printf("%s", argv[1]);
+	// printf("%d\n\n", count(argv[1]));
 	char **parc = parcer(count(argv[1]), argv[1]);
 	while (parc[i] != 0)
 	{
