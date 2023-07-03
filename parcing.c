@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/03 00:44:19 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/03 15:58:04 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ char	*ft_substr(char *s, unsigned int start, size_t len)
 	return (str);
 }
 
+// hadi li kat7ssb dok ">>"
+
 int redirect_count(char *str)
 {
 	int i;
@@ -78,7 +80,16 @@ int redirect_count(char *str)
 		if (str[i] == '>')
 		{
 			i++;
-			if (str[i] >= 21 && str[i] <= 126)
+			if (str[i] >= 21 && str[i] <= 126 && str[i] != '\0')
+				i++;
+			count++;
+		}
+		else if (str[i] == '<')
+		{
+			i++;
+			if (str[i] == '<')
+				i++;
+			else if (str[i] >= 21 && str[i] <= 126 && str[i] != '\0')
 				i++;
 			count++;
 		}
@@ -251,14 +262,14 @@ int main(int argc, char **argv)
 {
 	int i = 0;
 	
-	// printf("%s", argv[1]);
-	char p[30] = "\"pwd\"\">>\"\"po\"\0";
+	char p[30] = "\"pwd\"\">\"\"po\"\0";
+	printf("%d\n", redirect_count(p));
 	// printf("%d\n\n", count(argv[1]));
-	char **parc = parcer(p);
-	while (parc[i] != 0)
-	{
-		printf("%s\n", parc[i]);
-		i++;
-	}
+	// char **parc = parcer(p);
+	// while (parc[i] != 0)
+	// {
+	// 	printf("%s\n", parc[i]);
+	// 	i++;
+	// }
 }
 
