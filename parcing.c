@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/03 15:58:04 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/07 18:48:24 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,45 +99,58 @@ int redirect_count(char *str)
 	return (count);
 }
 
+int double_quotes(char *str)
+{
+	int i;
+	int quotes;
+
+	i = 0;
+	quotes = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\"' && quotes == 0)
+			quotes++;
+		else if (str[i] == '\"' && quotes == 1)
+			quotes--;
+		i++;
+	}
+	if (quotes == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int single_quotes(char *str)
+{
+	int i;
+	int quotes;
+
+	i = 0;
+	quotes = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'' && quotes == 0)
+			quotes++;
+		else if (str[i] == '\'' && quotes == 1)
+			quotes--;
+		i++;
+	}
+	if (quotes == 0)
+		return (0);
+	else
+		return (1);
+}
+
 int error(char *str)
 {
 	int i;
 	int error_found;
 
+	if (single_quotes(str) == 1 || double_quotes(str) == 1)
+		return (1);
 	i = 0;
 	error_found = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '\'')
-		{
-			error_found = 1;
-			while (str[i] != '\0')
-			{
-				i++;
-				if (str[i] == '\'')
-				{
-					error_found = 0;
-					break;
-				}
-			}
 	
-		}
-		else if (str[i] == '\"')
-		{
-			error_found = 2;
-			while (str[i] != '\0')
-			{
-				i++;
-				if (str[i] == '\"')
-				{
-					error_found = 0;
-					break;
-				}
-			}
-		}
-		else
-			i++;
-	}
 	return (error_found);
 }
 
@@ -190,7 +203,7 @@ int count(char *str)
 	return (count);
 }
 
-char **parcer(char *str)
+char **parser(char *str)
 {
 	char 	**parced;
 	size_t	i;
