@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/07 18:48:24 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/07 20:12:51 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,56 @@ int double_quotes(char *str)
 		return (1);
 }
 
+int fw_redir(char *str)
+{
+	int i;
+	int redir;
+
+	i = 0;
+	redir = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '>' && redir == 0)
+		{
+			if (str[i + 1] == '>')
+				i++;
+			redir++;
+		}
+		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 62 && str[i] != 34 && str[i] != 39 && str[i] != ' ' && str[i] != '\t' && redir == 1)
+			redir--;
+		i++;
+	}
+	if (redir == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int bw_redir(char *str)
+{
+	int i;
+	int redir;
+
+	i = 0;
+	redir = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '<' && redir == 0)
+		{
+			if (str[i + 1] == '<')
+				i++;
+			redir++;
+		}
+		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 34 && str[i] != 39 && str[i] != ' ' && str[i] != '\t' && redir == 1)
+			redir--;
+		i++;
+	}
+	if (redir == 0)
+		return (0);
+	else
+		return (1);
+}
+
 int single_quotes(char *str)
 {
 	int i;
@@ -146,12 +196,9 @@ int error(char *str)
 	int i;
 	int error_found;
 
-	if (single_quotes(str) == 1 || double_quotes(str) == 1)
+	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1)
 		return (1);
-	i = 0;
-	error_found = 0;
-	
-	return (error_found);
+	return (0);
 }
 
 int count(char *str)
@@ -211,9 +258,6 @@ char **parser(char *str)
 	size_t  sub_a;
 	size_t  sub_b;
 
-	// if (error(str) != 0)
-	// 	exit(0);
-		//ana drt exit hna nta ghadir return chi 9lwa bach tl3 command prompt again
 	parced = malloc(sizeof(char**) * count(str));
 	i = 0;
 	k = 0;
@@ -275,8 +319,9 @@ int main(int argc, char **argv)
 {
 	int i = 0;
 	
-	char p[30] = "\"pwd\"\">\"\"po\"\0";
-	printf("%d\n", redirect_count(p));
+	char p[30] = "\"pwd\"\">\"\'po\'\0";
+	printf("%d\n", error(p));
+	// printf("%d\n", redirect_count(p));
 	// printf("%d\n\n", count(argv[1]));
 	// char **parc = parcer(p);
 	// while (parc[i] != 0)
