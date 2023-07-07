@@ -6,12 +6,11 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/07 20:12:51 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/07 21:08:21 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "minishell.h"
 
 int	ft_strlen(char *str)
 {
@@ -191,12 +190,33 @@ int single_quotes(char *str)
 		return (1);
 }
 
+int pipe(str)
+{
+	int i;
+	int pp;
+
+	i = 0;
+	pp = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '|' && pp == 0)
+			pp++;
+		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 62 && str[i] != ' ' && str[i] != '\t' && pp == 1)
+			pp--;
+		i++;
+	}
+	if (pp == 0)
+		return (0);
+	else
+		return (1);
+}
+
 int error(char *str)
 {
 	int i;
 	int error_found;
 
-	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1)
+	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || pipe(str) == 1)
 		return (1);
 	return (0);
 }
