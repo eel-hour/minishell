@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/07 21:08:21 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:35:20 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,28 @@ int single_quotes(char *str)
 		return (1);
 }
 
-int pipe(str)
+int curshs(char *str)
+{
+	int i;
+	int cr;
+
+	i = 0;
+	cr = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '{' && cr == 0)
+			cr++;
+		else if (str[i] == '}' && cr == 1)
+			cr--;
+		i++;
+	}
+	if (cr == 0)
+		return (0);
+	else
+		return (1);
+}
+
+int piipe(char *str)
 {
 	int i;
 	int pp;
@@ -216,7 +237,7 @@ int error(char *str)
 	int i;
 	int error_found;
 
-	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || pipe(str) == 1)
+	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || curshs(str) == 1)
 		return (1);
 	return (0);
 }
@@ -278,7 +299,7 @@ char **parser(char *str)
 	size_t  sub_a;
 	size_t  sub_b;
 
-	parced = malloc(sizeof(char**) * count(str));
+	parced = malloc(sizeof(char*) * (count(str) + 1));
 	i = 0;
 	k = 0;
 	while (str[i] != '\0')
@@ -339,15 +360,15 @@ int main(int argc, char **argv)
 {
 	int i = 0;
 	
-	char p[30] = "\"pwd\"\">\"\'po\'\0";
+	char p[30] = "\"pwd\"\">\"\'po\' |{wc -l}\0";
 	printf("%d\n", error(p));
 	// printf("%d\n", redirect_count(p));
-	// printf("%d\n\n", count(argv[1]));
-	// char **parc = parcer(p);
-	// while (parc[i] != 0)
-	// {
-	// 	printf("%s\n", parc[i]);
-	// 	i++;
-	// }
+	printf("%d\n", count(p));
+	char **parc = parser(p);
+	while (parc[i] != 0)
+	{
+		printf("%s\n", parc[i]);
+		i++;
+	}
 }
 
