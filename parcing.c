@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/08 18:35:20 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/09 02:54:05 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,15 +298,29 @@ char **parser(char *str)
 	size_t	k;
 	size_t  sub_a;
 	size_t  sub_b;
+	int		cursh;
+	int		paran;
 
 	parced = malloc(sizeof(char*) * (count(str) + 1));
 	i = 0;
 	k = 0;
+	cursh = 0;
+	paran = 0;
 	while (str[i] != '\0')
     {
 		sub_a = 0;
 		sub_b = 0;
-        if (str[i] == ' ' || str[i] == '\t')
+		if (str[i] == '{')
+		{
+			cursh++;
+			i++;
+        }
+		else if (str[i] == '(')
+		{
+			paran++;
+			i++;
+        }
+		else if (str[i] == ' ' || str[i] == '\t')
         {
 			while (str[i] == ' ' || str[i] == '\t')
 				i++;
@@ -344,7 +358,18 @@ char **parser(char *str)
 			sub_a = i;
             while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != '\"' && str[i] != '\'')
                 i++;
-			sub_b = i;
+			if (cursh == 1 && str[i - 1] == '}')
+			{
+				cursh--;
+				sub_b = i - 1;
+			}
+			if (paran == 1 && str[i - 1] == ')')
+			{
+				paran--;
+				sub_b = i - 1;
+			}
+			else
+				sub_b = i;
         }
 		if ((sub_b - sub_a) > 0 && k < count(str))
 		{
@@ -360,7 +385,7 @@ int main(int argc, char **argv)
 {
 	int i = 0;
 	
-	char p[30] = "\"pwd\"\">\"\'po\' |{wc -l}\0";
+	char p[30] = "pwd > po |(wc -l)\0";
 	printf("%d\n", error(p));
 	// printf("%d\n", redirect_count(p));
 	printf("%d\n", count(p));
