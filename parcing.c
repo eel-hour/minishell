@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/09 02:54:05 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/09 19:28:19 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,9 @@ int piipe(char *str)
 	pp = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] == '|' && pp == 0)
+		if (str[i] == '|' && str[i + 1] == '|')
+			return (1);
+		else if (str[i] == '|' && pp == 0)
 			pp++;
 		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 62 && str[i] != ' ' && str[i] != '\t' && pp == 1)
 			pp--;
@@ -291,9 +293,18 @@ int count(char *str)
 	return (count);
 }
 
+char **double_char_null()
+{
+	char **returnd;
+
+	returnd = malloc(8);
+	returnd[0] = 0;
+	return (returnd);
+}
+
 char **parser(char *str)
 {
-	char 	**parced;
+	char 	**parsed;
 	size_t	i;
 	size_t	k;
 	size_t  sub_a;
@@ -301,7 +312,12 @@ char **parser(char *str)
 	int		cursh;
 	int		paran;
 
-	parced = malloc(sizeof(char*) * (count(str) + 1));
+	if (error(str) == 1)
+	{
+		write (1, "error parsing!!!", 16);
+		return (double_char_null());
+	}
+	parsed = malloc(sizeof(char*) * (count(str) + 1));
 	i = 0;
 	k = 0;
 	cursh = 0;
@@ -358,12 +374,18 @@ char **parser(char *str)
 			sub_a = i;
             while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != '\"' && str[i] != '\'')
                 i++;
-			if (cursh == 1 && str[i - 1] == '}')
+			if (cursh == 1 && (str[i - 1] == '}' || str[i - 1] == ')') && paran == 1 && (str[i - 2] == '}' || str[i - 2] == ')'))
+			{
+				paran--;
+				cursh--;
+				sub_b = i - 2;
+			}
+			else if (cursh == 1 && str[i - 1] == '}')
 			{
 				cursh--;
 				sub_b = i - 1;
 			}
-			if (paran == 1 && str[i - 1] == ')')
+			else if (paran == 1 && str[i - 1] == ')')
 			{
 				paran--;
 				sub_b = i - 1;
@@ -373,22 +395,22 @@ char **parser(char *str)
         }
 		if ((sub_b - sub_a) > 0 && k < count(str))
 		{
-			parced[k] = ft_substr(str, sub_a, sub_b - sub_a);
+			parsed[k] = ft_substr(str, sub_a, sub_b - sub_a);
 			k++;
 		}
     }
-	parced[k] = 0;
-	return (parced);
+	parsed[k] = 0;
+	return (parsed);
 }
 
 int main(int argc, char **argv)
 {
 	int i = 0;
 	
-	char p[30] = "pwd > po |(wc -l)\0";
-	printf("%d\n", error(p));
+	char p[100] = "echo pp | {wc -m | [wc -l]} ${USER}\0";
+	// printf("%d\n", error(p));
 	// printf("%d\n", redirect_count(p));
-	printf("%d\n", count(p));
+	// printf("%d\n", count(p));
 	char **parc = parser(p);
 	while (parc[i] != 0)
 	{
