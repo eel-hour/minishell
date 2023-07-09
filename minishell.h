@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/25 23:14:14 by hben-bou          #+#    #+#             */
-/*   Updated: 2023/07/07 18:49:09 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/09 21:24:17 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,22 @@ extern char **environ;
 
 typedef struct s_struct
 {
-    char *PATH;
-} t_struct;
+    char    *PATH;
+}           t_struct;
 
+typedef struct data_struct
+{
+	char 	**parsed;
+	size_t	i;
+	size_t	k;
+	size_t  sub_a;
+	size_t  sub_b;
+	int		cursh;
+	int		paran;
+}			t_parsing;
+
+// --error checker
+int error(char *str);
 // --likatssb lik >,>>,<,<<
 int redirect_count(char *str);
 // --hada lparser
