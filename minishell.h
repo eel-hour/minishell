@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/25 23:14:14 by hben-bou          #+#    #+#             */
-/*   Updated: 2023/07/09 21:24:17 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/09 22:43:54 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_struct
 typedef struct data_struct
 {
 	char 	**parsed;
-	size_t	i;
 	size_t	k;
 	size_t  sub_a;
 	size_t  sub_b;
