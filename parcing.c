@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/09 19:28:19 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/11 10:59:26 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,36 +304,31 @@ char **double_char_null()
 
 char **parser(char *str)
 {
-	char 	**parsed;
-	size_t	i;
-	size_t	k;
-	size_t  sub_a;
-	size_t  sub_b;
-	int		cursh;
-	int		paran;
+	t_parsing	data;
+	size_t		i;
 
 	if (error(str) == 1)
 	{
 		write (1, "error parsing!!!", 16);
 		return (double_char_null());
 	}
-	parsed = malloc(sizeof(char*) * (count(str) + 1));
+	data.parsed = malloc(sizeof(char*) * (count(str) + 1));
 	i = 0;
-	k = 0;
-	cursh = 0;
-	paran = 0;
+	data.k = 0;
+	data.cursh = 0;
+	data.paran = 0;
 	while (str[i] != '\0')
     {
-		sub_a = 0;
-		sub_b = 0;
+		data.sub_a = 0;
+		data.sub_b = 0;
 		if (str[i] == '{')
 		{
-			cursh++;
+			data.cursh++;
 			i++;
         }
 		else if (str[i] == '(')
 		{
-			paran++;
+			data.paran++;
 			i++;
         }
 		else if (str[i] == ' ' || str[i] == '\t')
@@ -343,71 +338,71 @@ char **parser(char *str)
 		}
 		else if (str[i] == '|' || str[i] == '>' || str[i] == '<')
 		{
-			sub_a = i;
+			data.sub_a = i;
 			if (str[i] == '>' && str[i + 1] == '>')
 				i++;
 			else if (str[i] == '<' && str[i + 1] == '<')
 				i++;
 			i++;
-			sub_b = i;
+			data.sub_b = i;
 		}
 		else if (str[i] == '\"')
 		{
 			i++;
-			sub_a = i;
+			data.sub_a = i;
 			while (str[i] != '\"')
 				i++;
-			sub_b = i;
+			data.sub_b = i;
 			i++;
 		}
 		else if (str[i] == '\'')
 		{
 			i++;
-			sub_a = i;
+			data.sub_a = i;
 			while (str[i] != '\'')
 				i++;
-			sub_b = i;
+			data.sub_b = i;
 			i++;
 		}
         else
         {
-			sub_a = i;
+			data.sub_a = i;
             while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != '\"' && str[i] != '\'')
                 i++;
-			if (cursh == 1 && (str[i - 1] == '}' || str[i - 1] == ')') && paran == 1 && (str[i - 2] == '}' || str[i - 2] == ')'))
+			if (data.cursh == 1 && (str[i - 1] == '}' || str[i - 1] == ')') && data.paran == 1 && (str[i - 2] == '}' || str[i - 2] == ')'))
 			{
-				paran--;
-				cursh--;
-				sub_b = i - 2;
+				data.paran--;
+				data.cursh--;
+				data.sub_b = i - 2;
 			}
-			else if (cursh == 1 && str[i - 1] == '}')
+			else if (data.cursh == 1 && str[i - 1] == '}')
 			{
-				cursh--;
-				sub_b = i - 1;
+				data.cursh--;
+				data.sub_b = i - 1;
 			}
-			else if (paran == 1 && str[i - 1] == ')')
+			else if (data.paran == 1 && str[i - 1] == ')')
 			{
-				paran--;
-				sub_b = i - 1;
+				data.paran--;
+				data.sub_b = i - 1;
 			}
 			else
-				sub_b = i;
+				data.sub_b = i;
         }
-		if ((sub_b - sub_a) > 0 && k < count(str))
+		if ((data.sub_b - data.sub_a) > 0 && data.k < count(str))
 		{
-			parsed[k] = ft_substr(str, sub_a, sub_b - sub_a);
-			k++;
+			data.parsed[data.k] = ft_substr(str, data.sub_a, data.sub_b - data.sub_a);
+			data.k++;
 		}
     }
-	parsed[k] = 0;
-	return (parsed);
+	data.parsed[data.k] = 0;
+	return (data.parsed);
 }
 
 int main(int argc, char **argv)
 {
 	int i = 0;
 	
-	char p[100] = "echo pp | {wc -m | [wc -l]} ${USER}\0";
+	char p[100] = "[ 3 -eq 3 ] && echo \"Numbers are equal\"";
 	// printf("%d\n", error(p));
 	// printf("%d\n", redirect_count(p));
 	// printf("%d\n", count(p));
