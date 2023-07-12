@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/12 18:55:55 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:19:47 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,25 @@
 //         i++;
 //     return (i);
 // }
+char **no_redir(char **parsed)
+{
+	int i;
+	int j;
+	int nofr;
+	char **returnd;
 
+	returnd = parsed;
+	i = 0;
+	j = 0;
+	while (parsed[i])
+	{
+		if (parsed[i][0] == '<' || parsed[i][0] == '>')
+			i++;
+		returnd[j++] = parsed[i++];
+	}
+	returnd[j] = 0;
+	return(returnd);
+}
 int redirection_counter(char **str)
 {
 	int i;
@@ -250,9 +268,27 @@ int piipe(char *str)
 		return (1);
 }
 
+int double_par(char *str)
+{
+	int i;
+	int para_nmb;
+	
+	i = 0;
+	para_nmb = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '(')
+			para_nmb++;;
+		i++;
+	}
+	if (para_nmb > 1)
+		return (1);
+	return (0);
+}
+
 int error(char *str)
 {
-	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1/* || curshs(str) == 1*/)
+	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || double_par(str) == 1/* || curshs(str) == 1*/)
 		return (1);
 	return (0);
 }
@@ -320,13 +356,13 @@ char **parser(char *str)
 	t_parsing	data;
 	int		i;
 
+	if (count(str) == 0)
+		return (NULL);
 	if (error(str) == 1)
 	{
 		printf("parsing error!\n");
 		return (NULL);
 	}
-	if (count(str) == 0)
-		return (NULL);
 	data.parsed = malloc(sizeof(char*) * (count(str) + 1));
 	i = 0;
 	data.k = 0;
@@ -341,7 +377,7 @@ char **parser(char *str)
 		// 	data.cursh++;
 		// 	i++;
         // }
-		if (str[i] == '(')
+		if (str[i] == '(' && data.paran != 1)
 		{
 			data.paran++;
 			i++;
@@ -415,9 +451,9 @@ char **parser(char *str)
 
 // int main()
 // {
-// 	char p[100] = "(((((pwd)))))  | wc -l";
-// 	char **ss = parser(p);
+// 	char p[100] = "(pwd > (wc -l))";
+// 	char **s = parser(p);
 // 	int i = 0;
-// 	while (ss[i] != 0)
-// 		printf("%s\n",ss[i++]);
+// 	while (s[i] != 0)
+// 		printf("%s\n",s[i++]);
 // }
