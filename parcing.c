@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/12 18:23:55 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/12 18:55:55 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,26 +206,26 @@ int single_quotes(char *str)
 		return (1);
 }
 
-int curshs(char *str)
-{
-	int i;
-	int cr;
+// int curshs(char *str)
+// {
+// 	int i;
+// 	int cr;
 
-	i = 0;
-	cr = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '{' && cr == 0)
-			cr++;
-		else if (str[i] == '}' && cr == 1)
-			cr--;
-		i++;
-	}
-	if (cr == 0)
-		return (0);
-	else
-		return (1);
-}
+// 	i = 0;
+// 	cr = 0;
+// 	while (str[i] != '\0')
+// 	{
+// 		if (str[i] == '{' && cr == 0)
+// 			cr++;
+// 		else if (str[i] == '}' && cr == 1)
+// 			cr--;
+// 		i++;
+// 	}
+// 	if (cr == 0)
+// 		return (0);
+// 	else
+// 		return (1);
+// }
 
 int piipe(char *str)
 {
@@ -252,7 +252,7 @@ int piipe(char *str)
 
 int error(char *str)
 {
-	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || curshs(str) == 1)
+	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1/* || curshs(str) == 1*/)
 		return (1);
 	return (0);
 }
@@ -336,12 +336,12 @@ char **parser(char *str)
     {
 		data.sub_a = 0;
 		data.sub_b = 0;
-		if (str[i] == '{')
-		{
-			data.cursh++;
-			i++;
-        }
-		else if (str[i] == '(')
+		// if (str[i] == '{')
+		// {
+		// 	data.cursh++;
+		// 	i++;
+        // }
+		if (str[i] == '(')
 		{
 			data.paran++;
 			i++;
@@ -384,21 +384,21 @@ char **parser(char *str)
 			data.sub_a = i;
             while (str[i] != '\0' && str[i] != ' ' && str[i] != '\t' && str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != '\"' && str[i] != '\'')
                 i++;
-			if (data.cursh == 1 && (str[i - 1] == '}' || str[i - 1] == ')') && data.paran == 1 && (str[i - 2] == '}' || str[i - 2] == ')'))
+			// if (data.cursh == 1 && (str[i - 1] == '}' || str[i - 1] == ')') && data.paran == 1 && (str[i - 2] == '}' || str[i - 2] == ')'))
+			// {
+			// 	data.paran--;
+			// 	data.cursh--;
+			// 	data.sub_b = i - 2;
+			// }
+			// else if (data.cursh == 1 && str[i - 1] == '}')
+			// {
+			// 	data.cursh--;
+			// 	data.sub_b = i - 1;
+			// }
+			if (data.paran != 0 && str[i - 1] == ')')
 			{
-				data.paran--;
-				data.cursh--;
-				data.sub_b = i - 2;
-			}
-			else if (data.cursh == 1 && str[i - 1] == '}')
-			{
-				data.cursh--;
-				data.sub_b = i - 1;
-			}
-			else if (data.paran == 1 && str[i - 1] == ')')
-			{
-				data.paran--;
-				data.sub_b = i - 1;
+				data.sub_b = i - data.paran;
+				data.paran = 0;
 			}
 			else
 				data.sub_b = i;
@@ -415,6 +415,9 @@ char **parser(char *str)
 
 // int main()
 // {
-// 	char p[100] = "      |   ";
-// 	printf("%d", error(p));
+// 	char p[100] = "(((((pwd)))))  | wc -l";
+// 	char **ss = parser(p);
+// 	int i = 0;
+// 	while (ss[i] != 0)
+// 		printf("%s\n",ss[i++]);
 // }
