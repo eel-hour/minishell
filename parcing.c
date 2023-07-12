@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/12 22:19:47 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/12 22:59:22 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char **no_redir(char **parsed)
 	returnd[j] = 0;
 	return(returnd);
 }
+
 int redirection_counter(char **str)
 {
 	int i;
@@ -286,6 +287,11 @@ int double_par(char *str)
 	return (0);
 }
 
+// int opend_n_closed(char *str)
+// {
+	
+// }
+
 int error(char *str)
 {
 	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || double_par(str) == 1/* || curshs(str) == 1*/)
@@ -451,7 +457,7 @@ char **parser(char *str)
 
 // int main()
 // {
-// 	char p[100] = "(pwd > (wc -l))";
+// 	char p[100] = "{pwd}";
 // 	char **s = parser(p);
 // 	int i = 0;
 // 	while (s[i] != 0)
