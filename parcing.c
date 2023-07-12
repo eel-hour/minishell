@@ -6,23 +6,39 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/11 10:59:26 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/12 18:23:55 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strlen(char *str)
-{
-	int	i;
+// int ft_strlen(char *str)
+// {
+//     int i;
 
+//     i = 0;
+//     while (str[i])
+//         i++;
+//     return (i);
+// }
+
+int redirection_counter(char **str)
+{
+	int i;
+	int counter;
+	
 	i = 0;
-	while (str[i] != '\0')
+	counter = 0;
+	while (str[i])
+	{
+		if (str[i][0] == '>' || str[i][0] == '<')
+			counter++;
 		i++;
-	return (i);
+	}
+	return (counter);
 }
 
-void	*ft_calloc(unsigned int size, unsigned int len)
+void	*ft_calloc(int size, int len)
 {
 	int				i;
 	int				total;
@@ -39,11 +55,11 @@ void	*ft_calloc(unsigned int size, unsigned int len)
 	return (ret);
 }
 
-char	*ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, int start, int len)
 {
-	unsigned int	j;
+	int	j;
 	char			*str;
-	unsigned int	i;
+	int	i;
 
 	i = ft_strlen(s);
 	if (start > i)
@@ -236,9 +252,6 @@ int piipe(char *str)
 
 int error(char *str)
 {
-	int i;
-	int error_found;
-
 	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || curshs(str) == 1)
 		return (1);
 	return (0);
@@ -293,7 +306,7 @@ int count(char *str)
 	return (count);
 }
 
-char **double_char_null()
+char **double_char_null(void)
 {
 	char **returnd;
 
@@ -305,13 +318,15 @@ char **double_char_null()
 char **parser(char *str)
 {
 	t_parsing	data;
-	size_t		i;
+	int		i;
 
 	if (error(str) == 1)
 	{
-		write (1, "error parsing!!!", 16);
-		return (double_char_null());
+		printf("parsing error!\n");
+		return (NULL);
 	}
+	if (count(str) == 0)
+		return (NULL);
 	data.parsed = malloc(sizeof(char*) * (count(str) + 1));
 	i = 0;
 	data.k = 0;
@@ -398,19 +413,8 @@ char **parser(char *str)
 	return (data.parsed);
 }
 
-int main(int argc, char **argv)
-{
-	int i = 0;
-	
-	char p[100] = "[ 3 -eq 3 ] && echo \"Numbers are equal\"";
-	// printf("%d\n", error(p));
-	// printf("%d\n", redirect_count(p));
-	// printf("%d\n", count(p));
-	char **parc = parser(p);
-	while (parc[i] != 0)
-	{
-		printf("%s\n", parc[i]);
-		i++;
-	}
-}
-
+// int main()
+// {
+// 	char p[100] = "      |   ";
+// 	printf("%d", error(p));
+// }
