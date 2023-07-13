@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/12 22:59:22 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/13 19:35:20 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 //         i++;
 //     return (i);
 // }
+
 char **no_redir(char **parsed)
 {
 	int i;
@@ -287,14 +288,34 @@ int double_par(char *str)
 	return (0);
 }
 
-// int opend_n_closed(char *str)
-// {
-	
-// }
+int opend_n_closed(char *str)
+{
+	int i;
+	int para_nmb;
+
+	i = 0;
+	para_nmb = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '(')
+			para_nmb++;;
+		i++;
+	}
+	i = 0;
+	while (str[i] != '\0')
+	{
+		if (str[i] == ')')
+			para_nmb--;;
+		i++;
+	}
+	if (para_nmb != 0)
+		return (1);
+	return (0);
+}
 
 int error(char *str)
 {
-	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || double_par(str) == 1/* || curshs(str) == 1*/)
+	if (single_quotes(str) == 1 || double_quotes(str) == 1 || fw_redir(str) == 1 || bw_redir(str) == 1 || piipe(str) == 1 || double_par(str) == 1 || opend_n_closed(str) == 1/* || curshs(str) == 1*/)
 		return (1);
 	return (0);
 }
@@ -458,6 +479,7 @@ char **parser(char *str)
 // int main()
 // {
 // 	char p[100] = "{pwd}";
+// 	// printf("%d", error(p));
 // 	char **s = parser(p);
 // 	int i = 0;
 // 	while (s[i] != 0)
