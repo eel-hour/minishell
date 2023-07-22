@@ -6,21 +6,21 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/16 19:09:51 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/22 19:56:56 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_strlen(char *str)
-{
-    int i;
+// int ft_strlen(char *str)
+// {
+//     int i;
 
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
-}
+//     i = 0;
+//     while (str[i])
+//         i++;
+//     return (i);
+// }
 
 int redirection_counter(char **str)
 {
@@ -315,6 +315,115 @@ char **double_char_null(void)
 	return (returnd);
 }
 
+
+char *joining(char **str)
+{
+	char *returnd;
+	int i;
+
+	returnd = "\0";
+	i = 0;
+	while (str[i])
+	{
+		returnd = ft_strjoin(returnd, str[i], 4);
+		i++;
+	}
+	return (returnd);
+
+}
+
+char **replacing(char **str)
+{
+	int i;
+	int k;
+	
+	i = 0;
+	k = 0;
+    while (str[i])
+    {
+        if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
+            str[i] = remove_nl(getenv(path(str[i])));
+		else if (str[i][0] == '$')
+		{
+            k = i;
+			while (str[i])
+			{
+				str[i] = str[i + 1];
+				i++;
+			}
+			i = k;
+			i--;
+		}
+		else
+			str[i] = str[i];
+        i++;
+    }
+	return (str);
+}
+
+char *replace_pwd(char *str)
+{
+	int i;
+	int trigger;
+	char	**returnd;
+
+	trigger = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			trigger = 1;
+		i++;
+	}
+	if (trigger)
+	{
+		returnd = ft_spliting(str);
+		returnd = replacing(returnd);
+		return (joining(returnd));
+	}
+	else
+	{
+		return (str);
+	}
+}
+
+char **check_path(char **str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i][0] != '\'' && str[i][ft_strlen(str[i]) - 1] != '\'')
+			str[i] = replace_pwd(str[i]);
+		i++;
+	}
+	return (str);
+}
+
+char **remove_single(char **str)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i][0] == '\'' && str[i][ft_strlen(str[i]) - 1] == '\'')
+		{
+			j = 0;
+			while (str[i][j])
+			{
+				str[i][j] = str[i][j +1];
+				j++;
+			}
+			str[i][j - 2] = str[i][j - 1];
+		}
+		i++;
+	}
+	return (str);
+}
+
 char **parser(char *str)
 {
 	t_parsing	data;
@@ -440,14 +549,15 @@ char **parser(char *str)
 		}
     }
 	data.parsed[data.k] = 0;
+	data.parsed = check_path(data.parsed);
+	data.parsed = remove_single(data.parsed);
 	return (data.parsed);
 }
 
 
 int main()
 {
-	char p[100] = " echo 'kn;frkv'";
-	// printf("%d", error(p));
+	char p[100] = "echo '$PWD/minishell'  $PWD/minishell";
 	char **s = parser(p);
 	int i = 0;
 	while (s[i] != 0)
