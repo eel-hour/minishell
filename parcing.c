@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/22 22:31:15 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/23 01:57:45 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int fw_redir(char *str)
 				i++;
 			redir++;
 		}
-		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 62 && str[i] != 34 && str[i] != 39 && str[i] != ' ' && str[i] != '\t' && redir == 1)
+		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 62 && str[i] != 34 && str[i] != 39 && str[i] != ' ' && str[i] != '|' && str[i] != '\t' && redir == 1)
 			redir--;
 		i++;
 	}
@@ -175,7 +175,7 @@ int bw_redir(char *str)
 				i++;
 			redir++;
 		}
-		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 34 && str[i] != 39 && str[i] != ' ' && str[i] != '\t' && redir == 1)
+		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 34 && str[i] != 39 && str[i] != ' ' && str[i] != '|' && str[i] != '\t' && redir == 1)
 			redir--;
 		i++;
 	}
@@ -236,12 +236,12 @@ int piipe(char *str)
 	pp = 0;
 	while (str[i] != '\0')
 	{
-		if (str[i] == '|' && str[i + 1] == '|')
+		if (str[i] != '\0' && str[i] == '|' && str[i + 1] == '|')
 			return (1);
-		else if (str[i] == '|' && pp == 0)
-			pp++;
-		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 62 && str[i] != ' ' && str[i] != '\t' && pp == 1)
-			pp--;
+		// else if (str[i] == '|' && pp == 0)
+		// 	pp++;
+		// else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 62 && str[i] != ' ' && str[i] != '\t' && pp == 1)
+		// 	pp--;
 		i++;
 	}
 	if (pp == 0)
@@ -341,9 +341,7 @@ char **replacing(char **str)
 	k = 0;
     while (str[i])
     {
-		if (str[i][0] == '$' && str[i][1] == '\0')
-		;
-        else if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
+        if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
             str[i] = remove_nl(getenv(path(str[i])));
 		else if (str[i][0] == '$')
 		{
@@ -356,6 +354,8 @@ char **replacing(char **str)
 			i = k;
 			i--;
 		}
+		else
+			str[i] = str[i];
         i++;
     }
 	return (str);
@@ -436,7 +436,7 @@ char **parser(char *str)
 	if (error(str) == 1)
 	{
 		printf("parsing error!\n");
-		return (NULL);
+		return (double_char_null());
 	}
 	if (count(str) == 0)
 		return (NULL);
@@ -557,7 +557,7 @@ char **parser(char *str)
 
 int main()
 {
-	char p[100] = "echo $";
+	char p[100] = "pwd >";
 	char **s = parser(p);
 	int i = 0;
 	while (s[i] != 0)
