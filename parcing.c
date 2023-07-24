@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/24 21:05:46 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/24 23:56:42 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,6 +332,23 @@ char *joining(char **str)
 
 }
 
+char *shift_back_str(char *str, int nbr)
+{
+	int i;
+
+	i = 0;
+	if (ft_strlen(str) > nbr && nbr < 1)
+		return(NULL);
+	i = nbr;
+	while(str[i])
+	{
+		str[i - nbr] = str[i];
+		i++;
+	}
+	str[i - nbr] = str[i];
+	return(str);
+}
+
 char **replacing(char **str, t_struct *s)
 {
 	int i;
@@ -341,11 +358,11 @@ char **replacing(char **str, t_struct *s)
 	k = 0;
     while (str[i])
     {
-		// if ((ft_strlen(str[i]) >= 5) && str[i][0] == '$' && str[i][1] == 'P' && str[i][2] == 'A' && str[i][3] == 'T' && str[i][4] == 'H' && str[i][5] == '\0')
-		// 	;
-		if (ft_strcmp(str[i], "$PATH", -1))
-			str[i] = ft_strdup()
-        /*else */if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
+		if (ft_strlen(str[i]) >= 2 && str[i][0] == '$' && ft_isdigit(str[i][1]) == 1)
+			str[i] = shift_back_str(str[i], 2);
+		if (ft_strlen(str[i]) >= 5 && str[i][0] == '$' && str[i][1] == 'P' && str[i][2] == 'A' && str[i][3] == 'T' && str[i][4] == 'H' && str[i][5] == '\0' || && )
+			;
+        else if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
             str[i] = remove_nl(getenv(path(str[i])));
 		else if (str[i][0] == '$')
 		{
