@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/23 01:57:45 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/24 21:05:46 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -332,7 +332,7 @@ char *joining(char **str)
 
 }
 
-char **replacing(char **str)
+char **replacing(char **str, t_struct *s)
 {
 	int i;
 	int k;
@@ -341,7 +341,11 @@ char **replacing(char **str)
 	k = 0;
     while (str[i])
     {
-        if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
+		// if ((ft_strlen(str[i]) >= 5) && str[i][0] == '$' && str[i][1] == 'P' && str[i][2] == 'A' && str[i][3] == 'T' && str[i][4] == 'H' && str[i][5] == '\0')
+		// 	;
+		if (ft_strcmp(str[i], "$PATH", -1))
+			str[i] = ft_strdup()
+        /*else */if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
             str[i] = remove_nl(getenv(path(str[i])));
 		else if (str[i][0] == '$')
 		{
@@ -361,7 +365,7 @@ char **replacing(char **str)
 	return (str);
 }
 
-char *replace_pwd(char *str)
+char *replace_pwd(char *str, t_struct *s)
 {
 	int i;
 	int trigger;
@@ -378,7 +382,7 @@ char *replace_pwd(char *str)
 	if (trigger)
 	{
 		returnd = ft_spliting(str);
-		returnd = replacing(returnd);
+		returnd = replacing(returnd, s);
 		return (joining(returnd));
 	}
 	else
@@ -387,7 +391,7 @@ char *replace_pwd(char *str)
 	}
 }
 
-char **check_path(char **str)
+char **check_path(char **str, t_struct *s)
 {
 	int i;
 
@@ -395,7 +399,7 @@ char **check_path(char **str)
 	while (str[i])
 	{
 		if (str[i][0] != '\'' && str[i][ft_strlen(str[i]) - 1] != '\'')
-			str[i] = replace_pwd(str[i]);
+			str[i] = replace_pwd(str[i], s);
 		i++;
 	}
 	return (str);
@@ -424,7 +428,7 @@ char **remove_single(char **str)
 	return (str);
 }
 
-char **parser(char *str)
+char **parser(char *str, t_struct *s)
 {
 	t_parsing	data;
 	int 		history_a;
@@ -549,17 +553,17 @@ char **parser(char *str)
 		}
     }
 	data.parsed[data.k] = 0;
-	data.parsed = check_path(data.parsed);
+	data.parsed = check_path(data.parsed, s);
 	data.parsed = remove_single(data.parsed);
 	return (data.parsed);
 }
 
 
-int main()
-{
-	char p[100] = "pwd >";
-	char **s = parser(p);
-	int i = 0;
-	while (s[i] != 0)
-		printf("%s\n",s[i++]);
-}
+// int main()
+// {
+// 	char p[100] = "$PATH";
+// 	char **s = parser(p);
+// 	int i = 0;
+// 	while (s[i] != 0)
+// 		printf("%s\n",s[i++]);
+// }
