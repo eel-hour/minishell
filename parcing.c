@@ -6,7 +6,7 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/24 23:56:42 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/25 01:44:41 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -358,6 +358,8 @@ char **replacing(char **str, t_struct *s)
 	k = 0;
     while (str[i])
     {
+		if (ft_strlen(str[i]) >= 2 && str[i][0] == '$' && (str[i][1] == '?' || str[i][1] == '-'))
+			;
 		if (ft_strlen(str[i]) >= 2 && str[i][0] == '$' && ft_isdigit(str[i][1]) == 1)
 			str[i] = shift_back_str(str[i], 2);
 		if (ft_strlen(str[i]) >= 5 && str[i][0] == '$' && str[i][1] == 'P' && str[i][2] == 'A' && str[i][3] == 'T' && str[i][4] == 'H' && str[i][5] == '\0' || && )
