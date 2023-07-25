@@ -6,19 +6,19 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 13:06:02 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/22 19:37:14 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/24 23:50:16 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int		ft_isdigit(int c)
-// {
-// 	if (c >= '0' && c <= '9')
-// 		return (1);
-// 	else
-// 		return (0);
-// }
+int		ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	else
+		return (0);
+}
 
 // int	ft_str2len(char **chart)
 // {
@@ -193,14 +193,13 @@ char	**ft_spliting(char *s)
 	{
 		a = 0;
 		b = 0;
-		while (s[i] == '$' || s[i] == '/')
+		while (s[i] == '$' || s[i] == '/' || s[i] == '+')
 			i++;
 		a = i;
 		if (i != 0)
 			a = i - 1;
-		while ((s[i] != '$' && s[i] != '/') && s[i])
+		while ((s[i] != '$' && s[i] != '/' && s[i] != '+') && s[i])
 			i++;
-		
 		b = i;
 		trimmed[j++] = ft_substr(s, a, (b - a));
 	}
