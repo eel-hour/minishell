@@ -6,22 +6,28 @@
 /*   By: eel-hour <eel-hour@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/29 19:06:23 by eel-hour          #+#    #+#             */
-/*   Updated: 2023/07/25 01:44:41 by eel-hour         ###   ########.fr       */
+/*   Updated: 2023/07/30 22:54:28 by eel-hour         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int ft_strlen(char *str)
-// {
-//     int i;
+int ft_strlen(char *str)
+{
+    int i;
 
-//     i = 0;
-//     while (str[i])
-//         i++;
-//     return (i);
-// }
+    i = 0;
+    while (str[i])
+        i++;
+    return (i);
+}
 
+int ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
 int redirection_counter(char **str)
 {
 	int i;
@@ -238,10 +244,10 @@ int piipe(char *str)
 	{
 		if (str[i] != '\0' && str[i] == '|' && str[i + 1] == '|')
 			return (1);
-		// else if (str[i] == '|' && pp == 0)
-		// 	pp++;
-		// else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 62 && str[i] != ' ' && str[i] != '\t' && pp == 1)
-		// 	pp--;
+		else if (str[i] == '|' && pp == 0)
+			pp++;
+		else if ((str[i] >= 33 && str[i] <= 126) && str[i] != 60 && str[i] != 62 && str[i] != ' ' && str[i] != '\t' && pp == 1)
+			pp--;
 		i++;
 	}
 	if (pp == 0)
@@ -349,7 +355,7 @@ char *shift_back_str(char *str, int nbr)
 	return(str);
 }
 
-char **replacing(char **str, t_struct *s)
+char **replacing(char **str)
 {
 	int i;
 	int k;
@@ -358,11 +364,13 @@ char **replacing(char **str, t_struct *s)
 	k = 0;
     while (str[i])
     {
-		if (ft_strlen(str[i]) >= 2 && str[i][0] == '$' && (str[i][1] == '?' || str[i][1] == '-'))
+		if (str[i][0] == '$' && str[i][1] == '\0')
 			;
-		if (ft_strlen(str[i]) >= 2 && str[i][0] == '$' && ft_isdigit(str[i][1]) == 1)
+		else if ((ft_strlen(str[i]) >= 2 && str[i][0] == '$' && (str[i][1] == '?' || str[i][1] == '-')))
+			;
+		else if (ft_strlen(str[i]) >= 2 && str[i][0] == '$' && ft_isdigit(str[i][1]) == 1)
 			str[i] = shift_back_str(str[i], 2);
-		if (ft_strlen(str[i]) >= 5 && str[i][0] == '$' && str[i][1] == 'P' && str[i][2] == 'A' && str[i][3] == 'T' && str[i][4] == 'H' && str[i][5] == '\0' || && )
+		else if (ft_strlen(str[i]) >= 5 && str[i][0] == '$' && str[i][1] == 'P' && str[i][2] == 'A' && str[i][3] == 'T' && str[i][4] == 'H' && str[i][5] == '\0')
 			;
         else if (str[i][0] == '$' && getenv(path(str[i])) != NULL)
             str[i] = remove_nl(getenv(path(str[i])));
@@ -384,7 +392,7 @@ char **replacing(char **str, t_struct *s)
 	return (str);
 }
 
-char *replace_pwd(char *str, t_struct *s)
+char *replace_pwd(char *str)
 {
 	int i;
 	int trigger;
@@ -401,7 +409,7 @@ char *replace_pwd(char *str, t_struct *s)
 	if (trigger)
 	{
 		returnd = ft_spliting(str);
-		returnd = replacing(returnd, s);
+		returnd = replacing(returnd);
 		return (joining(returnd));
 	}
 	else
@@ -410,7 +418,7 @@ char *replace_pwd(char *str, t_struct *s)
 	}
 }
 
-char **check_path(char **str, t_struct *s)
+char **check_path(char **str)
 {
 	int i;
 
@@ -418,7 +426,7 @@ char **check_path(char **str, t_struct *s)
 	while (str[i])
 	{
 		if (str[i][0] != '\'' && str[i][ft_strlen(str[i]) - 1] != '\'')
-			str[i] = replace_pwd(str[i], s);
+			str[i] = replace_pwd(str[i]);
 		i++;
 	}
 	return (str);
@@ -447,11 +455,9 @@ char **remove_single(char **str)
 	return (str);
 }
 
-char **parser(char *str, t_struct *s)
+char **parser(char *str)
 {
 	t_parsing	data;
-	int 		history_a;
-	int 		history_b;
 	int			isecond;
 	int			trig;
 	int			i;
@@ -467,8 +473,6 @@ char **parser(char *str, t_struct *s)
 	i = 0;
 	data.k = 0;
 	isecond = 0;
-	history_a = 0;
-	history_b = 0;
 	trig = 0;
 	data.cursh = 0;
 	data.paran = 0;
@@ -572,17 +576,17 @@ char **parser(char *str, t_struct *s)
 		}
     }
 	data.parsed[data.k] = 0;
-	data.parsed = check_path(data.parsed, s);
+	data.parsed = check_path(data.parsed);
 	data.parsed = remove_single(data.parsed);
 	return (data.parsed);
 }
 
 
-// int main()
-// {
-// 	char p[100] = "$PATH";
-// 	char **s = parser(p);
-// 	int i = 0;
-// 	while (s[i] != 0)
-// 		printf("%s\n",s[i++]);
-// }
+int main()
+{
+	char p[100] = "$PATH";
+	char **s = parser(p);
+	int i = 0;
+	while (s[i] != 0)
+		printf("%s\n",s[i++]);
+}
