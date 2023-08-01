@@ -12,15 +12,16 @@
 
 #include "minishell.h"
 
-int ft_strlen(char *str)
-{
-    int i;
 
-    i = 0;
-    while (str[i])
-        i++;
-    return (i);
-}
+// int ft_strlen(char *str)
+// {
+//     int i;
+
+//     i = 0;
+//     while (str[i])
+//         i++;
+//     return (i);
+// }
 
 int ft_isdigit(int c)
 {
@@ -577,16 +578,16 @@ char **parser(char *str)
     }
 	data.parsed[data.k] = 0;
 	data.parsed = check_path(data.parsed);
-	data.parsed = remove_single(data.parsed);
+	// data.parsed = remove_single(data.parsed);
 	return (data.parsed);
 }
 
 
-int main()
-{
-	char p[100] = "$PATH";
-	char **s = parser(p);
-	int i = 0;
-	while (s[i] != 0)
-		printf("%s\n",s[i++]);
-}
+// int main()
+// {
+// 	char p[100] = "$PATH";
+// 	char **s = parser(p);
+// 	int i = 0;
+// 	while (s[i] != 0)
+// 		printf("%s\n",s[i++]);
+// }

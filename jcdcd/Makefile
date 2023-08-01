@@ -12,7 +12,7 @@
 
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I/Users/hben-bou/homebrew/opt/readline/include -g -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -I/Users/hben-bou/homebrew/opt/readline/include #-g -fsanitize=address
 
 SRC = implement.c utils.c ft_split.c right_direct.c environment.c path.c parcing.c heredoc.c create_files.c old_pwd.c builtins.c echo.c spliting.c redirections1.c ft_atoi.c pipes.c
 		

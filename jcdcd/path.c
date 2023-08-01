@@ -57,7 +57,7 @@ char *remove_nl(char *str)
     i = 0;
     while (str[i] && str[i] != '\n')
         i++;
-    ptr = malloc(sizeof(char) * i + 1);
+    ptr = malloc(sizeof(char) * (i + 1));
     if (!ptr)
         return (NULL);
     i = 0;
@@ -66,6 +66,7 @@ char *remove_nl(char *str)
         ptr[i] = str[i];
         i++;
     }
+    ptr[i] = '\0';
     return (ptr);
 }
 
